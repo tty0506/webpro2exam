@@ -54,20 +54,23 @@
 
       <p>購入数を入力して、購入ボタンを押してください。</p>
       <?php
+	  		$id = $_GET["id"] || $_POST["id"];
             $con = mysql_connect("localhost","root","");
             if (!$con) {  die('Could not connect: ' . mysql_error()); }
             mysql_select_db("webpro2examdb", $con);
 
             if(isset($_POST['my_sub'])){
-               $result = mysql_query("INSERT INTO  `qme_mycounter`.`sales` (`ID` ,`product_id` ,`sales_at` ,`quantity`)
-                      VALUES ( NULL ,  ".$_POST['id'].",  '".date('Y-m-d',time())."',  ".$_POST['count']." )");
+				
+               $result = mysql_query("INSERT INTO  `sales` (`product_id` ,`sales_at` ,`quantity`)
+                      VALUES ( '".$_POST['id']."',  '".date('Y-m-d',time())."',  ".$_POST['count']." )");
+					  echo mysql_error();
             }
             mysql_query("SET NAMES 'utf8'");
             $result = mysql_query("SELECT * FROM products where ID=".$_GET['id']);
             while($p = mysql_fetch_array($result)){
            ?>
       <form class="form-horizontal"  role="form" method="post">
-        <input type="hidden" value="<?php echo $p['id']?>" name="id">
+        <input type="hidden" value="<?php echo $id?>" name="id">
         <fieldset>
           <div class="form-group">
             <label class="col-sm-2 control-label">商品名</label>
@@ -97,7 +100,7 @@
         <div class="well">
           <a href="index.php" class="btn btn-default">戻る</a>
           &nbsp;
-          <button type="submit" name="my_sub" class="btn btn-primary">購入する</button>
+          <button type="submit" name="my_sub" value="my_sub" class="btn btn-primary">購入する</button>
         </div>
       </form>
 
